@@ -1,0 +1,42 @@
+{
+  "name": "denomon.workspace",
+  "dockerFile": "./Dockerfile",
+  "updateRemoteUserUID": true,
+  "workspaceFolder": "/home/developer/workspace",
+
+  "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/hooks/post-create.sh",
+
+  "mounts": [
+    "source=zsh_history-${devcontainerId},target=/home/developer/.zsh,type=volume",
+    "source=${localEnv:HOME}/.ssh,target=/home/developer/.ssh,type=bind",
+    "source=${localWorkspaceFolder},target=/home/developer/workspace,type=bind,consistency=cached"
+  ],
+
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "deno.enable": true,
+        "deno.lint": true,
+        /** Formatting */
+        "editor.defaultFormatter": "denoland.vscode-deno",
+
+        /** Terminal */
+        "terminal.integrated.copyOnSelection": true,
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      "extensions": [
+        "GitHub.copilot",
+        "ms-azuretools.vscode-docker",
+        "streetsidesoftware.code-spell-checker",
+        "eamodio.gitlens",
+        "bradlc.vscode-tailwindcss",
+        "mhutchie.git-graph",
+        "denoland.vscode-deno"
+      ]
+    }
+  }
+}

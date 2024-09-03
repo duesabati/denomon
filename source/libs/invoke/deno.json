@@ -1,0 +1,14 @@
+{
+  "name": "@duesabati/invoke",
+  "version": "0.0.1",
+  "exports": "./index.ts",
+
+  "imports": {},
+
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true,
+    "indentWidth": 2,
+    "lineWidth": 80
+  }
+}

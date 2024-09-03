@@ -1,0 +1,45 @@
+{
+  "description": "Denomon | A comfortable yet unintrusive Deno-based monorepo toolchain protocol.",
+
+  "compilerOptions": {
+    "types": ["@types/react", "@types/react-dom"],
+    "lib": ["dom", "deno.ns", "dom.iterable", "deno.unstable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "jsxImportSourceTypes": "@types/react"
+  },
+
+  "imports": {
+    "react": "npm:react@19.0.0",
+    "react-dom": "npm:react-dom@19.0.0",
+    "@types/react": "npm:@types/react@19.0.0",
+    "@types/react-dom": "npm:@types/react-dom@19.0.0"
+  },
+
+  "workspace": [
+    "source/apps/**",
+    "source/integrations/**",
+    "source/core/**",
+    "source/libs/**",
+
+    ".denomon/**"
+  ],
+  "lock": false,
+
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true,
+    "indentWidth": 2,
+    "lineWidth": 80
+  },
+
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any", "ban-types"]
+    }
+  },
+
+  "unstable": [
+    "fmt-component"
+  ]
+}

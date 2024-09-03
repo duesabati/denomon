@@ -1,0 +1,19 @@
+{
+  "name": "@denomon/core.kits",
+  "description": "Denomon CLI",
+  "version": "0.0.1",
+  "exports": "./index.ts",
+
+  "imports": {
+    "@std/fs": "jsr:@std/fs@1.0.2",
+    "@std/path": "jsr:@std/path@1.0.3",
+    "@std/jsonc": "jsr:@std/jsonc@1.0.2"
+  },
+
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true,
+    "indentWidth": 2,
+    "lineWidth": 80
+  }
+}
