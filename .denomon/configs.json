@@ -1,0 +1,6 @@
+{
+  "associations": {
+    "cli": "@denomon-kits/cli.deno",
+    "test.web": "@denomon-kits/web.react-lean"
+  }
+}

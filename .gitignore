@@ -1,0 +1,5 @@
+.denomon/artifacts
+.denomon/bin
+
+!.devcontainer/tmp/.gitkeep
+.devcontainer/tmp/*
