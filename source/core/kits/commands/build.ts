@@ -2,21 +2,22 @@ import { Env } from '../env.ts'
 
 import { Generic } from './concepts.ts'
 
-export type Options = { environment: string; develop: boolean; out: string }
+export type Options = { environment: string; watch: boolean }
+export type Configuration = { out: string }
+
+export const ENTRYPOINT = 'build.ts'
 
 /**
  * The Build capability of a kit.
  *
  * It sets the necessary env vars and runs the build script of the kit.
  */
-export class Build extends Generic {
-  constructor(private readonly options: Options) {
+export class Command extends Generic {
+  constructor(private readonly options: Options & Configuration) {
     super()
   }
 
   Run(kit: string, app: string): void {
-    const script = 'build.ts'
-
     const env = this.options.environment
     const out = this.options.out
 
@@ -25,7 +26,17 @@ export class Build extends Generic {
     Env.set('ENV', env)
 
     const cmd = new Deno.Command('deno', {
-      args: ['run', '-A', '--unstable-bundle', kit + `/${script}`],
+      args: [
+        'run',
+        '-A',
+        '--quiet',
+        '--unstable-bundle',
+        kit + `/${ENTRYPOINT}`,
+        `--out-dir=${out}`,
+        `--env-dir=${env}`,
+        this.options.watch ? '--watch' : '',
+        app,
+      ],
       env: { ...Deno.env.toObject() },
     })
 

@@ -1,2 +1,2 @@
-export * from './build.ts'
+export * as Build from './build.ts'
 export * from './concepts.ts'
