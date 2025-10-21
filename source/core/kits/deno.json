@@ -1,5 +1,5 @@
 {
-  "name": "@denomon/core.kits",
+  "name": "@denomon/core-kits",
   "description": "Denomon CLI",
   "version": "0.0.1",
   "exports": "./index.ts",
