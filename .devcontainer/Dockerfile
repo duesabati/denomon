@@ -40,6 +40,7 @@ RUN usermod -aG docker developer
 
 # Set Denomon environment variables
 ENV DENOMON_WORKSPACE_DIR="${WORKSPACE_DIR}"
+ENV DENOMON_TMP_DIR="${WORKSPACE_DIR}/.denomon/tmp"
 ENV DENOMON_KITS_CONFIG="${WORKSPACE_DIR}/.denomon/configs.json"
 ENV DENOMON_ARTIFACTS_DIR="${WORKSPACE_DIR}/.denomon/artifacts"
 ENV DENOMON_KITS_DIR="${WORKSPACE_DIR}/.denomon/kits"
@@ -58,9 +59,6 @@ RUN echo 'export ZSH="/home/${USERNAME}/.oh-my-zsh"' >> /home/developer/.zshrc &
 
 USER $USERNAME
 RUN mkdir -p /home/developer/.zsh
-ENV HISTFILE=/home/developer/.zsh/.zsh_history
-ENV HISTSIZE=10000
-ENV SAVEHIST=10000
 
 ENV TERM=xterm
 

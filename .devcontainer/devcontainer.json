@@ -1,8 +1,14 @@
 {
-  "name": "${localWorkspaceFolderBasename}",
+  "name": "infinitydoc.appointments",
   "dockerFile": "./Dockerfile",
   "updateRemoteUserUID": true,
   "workspaceFolder": "/home/developer/workspace",
+
+  "remoteEnv": {
+    "HISTFILE": "/home/developer/.zsh/.zsh_history",
+    "HISTSIZE": "10000",
+    "SAVEHIST": "10000"
+  },
 
   "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/hooks/post-create.sh",
 
@@ -35,7 +41,8 @@
         "eamodio.gitlens",
         "bradlc.vscode-tailwindcss",
         "mhutchie.git-graph",
-        "denoland.vscode-deno"
+        "denoland.vscode-deno",
+        "mikestead.dotenv"
       ]
     }
   }
