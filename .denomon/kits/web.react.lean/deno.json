@@ -1,5 +1,5 @@
 {
-  "name": "@denomon-kits/web.react-lean",
+  "name": "@denomon/kit-react-lean",
   "exports": {
     "./dev": "./dev.ts"
   },
