@@ -9,13 +9,6 @@
     "jsxImportSourceTypes": "@types/react"
   },
 
-  "imports": {
-    "react": "npm:react@19.0.0",
-    "react-dom": "npm:react-dom@19.0.0",
-    "@types/react": "npm:@types/react@19.0.0",
-    "@types/react-dom": "npm:@types/react-dom@19.0.0"
-  },
-
   "workspace": [
     "source/apps/**",
     "source/integrations/**",

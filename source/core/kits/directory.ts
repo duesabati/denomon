@@ -28,7 +28,6 @@ export class Registry {
   constructor(private readonly path: string, private readonly config: Config) {}
 
   For(app: string): Kit {
-    console.log(`Looking for kit for app: ${app}`)
     const kit = this.config.Find(basename(app))
 
     if (!kit) throw new Error(`Kit not found for app: ${app}`)
