@@ -14,8 +14,10 @@ const kits = new Kits.Registry(KITS_DIR, config)
 const cmd = (opts: Kits.Build.Options, app: string) => {
   const build = new Kits.Build.Command({
     out: ARTIFACTS_DIR + `/${app}`,
-    environment: ENVS_DIR + opts.environment,
+    environment: ENVS_DIR + `/${opts.environment}`,
     watch: opts.watch,
+    minify: !opts.watch,
+    sourcemap: true,
   })
 
   return kits.For(APPS_DIR + `/${app}`).Execute(build)
@@ -50,7 +52,7 @@ const dev = new Command<void, void, Kits.Build.Options, [string]>()
     'Execute the build command in development mode. Alias for `build --develop`.',
   )
   .alias('dev')
-  .action((opts, pkg) => cmd({ ...opts, watch: true }, pkg))
+  .action((opts, pkg) => cmd({ ...opts, watch: true, environment: 'development' }, pkg))
 
 configure(dev)
 
