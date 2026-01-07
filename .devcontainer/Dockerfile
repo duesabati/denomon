@@ -1,8 +1,6 @@
-FROM debian:bookworm AS base
+FROM debian:bookworm-slim AS base
 
 ARG WORKSPACE_DIR="/home/developer/workspace"
-
-COPY --from=denoland/deno:bin-2.5.4 /deno /usr/local/bin/deno
 
 ENV USERNAME=developer
 ENV DENO_DIR="/home/${USERNAME}/.cache"
@@ -40,10 +38,13 @@ RUN usermod -aG docker developer
 
 # Set Denomon environment variables
 ENV DENOMON_WORKSPACE_DIR="${WORKSPACE_DIR}"
-ENV DENOMON_TMP_DIR="${WORKSPACE_DIR}/.denomon/tmp"
-ENV DENOMON_KITS_CONFIG="${WORKSPACE_DIR}/.denomon/configs.json"
-ENV DENOMON_ARTIFACTS_DIR="${WORKSPACE_DIR}/.denomon/artifacts"
-ENV DENOMON_KITS_DIR="${WORKSPACE_DIR}/.denomon/kits"
+ENV DENOMON_DIR="${WORKSPACE_DIR}/.denomon"
+ENV DENOMON_PATH="${WORKSPACE_DIR}/.denomon/bin/denomon"
+ENV DENOMON_TMP_DIR="${DENOMON_DIR}/tmp"
+ENV DENOMON_REPO_DIR="${DENOMON_DIR}/repo"
+ENV DENOMON_KITS_CONFIG="${DENOMON_DIR}/configs.json"
+ENV DENOMON_ARTIFACTS_DIR="${DENOMON_DIR}/artifacts"
+ENV DENOMON_KITS_DIR="${DENOMON_DIR}/kits"
 ENV DENOMON_ENVS_DIR="${WORKSPACE_DIR}/source/envs"
 ENV DENOMON_APPS_DIR="${WORKSPACE_DIR}/source/apps"
 
@@ -58,6 +59,10 @@ RUN echo 'export ZSH="/home/${USERNAME}/.oh-my-zsh"' >> /home/developer/.zshrc &
 
 
 USER $USERNAME
+
+COPY --from=denoland/deno:bin-2.6.3 /deno /home/developer/.deno/bin/deno
+ENV PATH="/home/developer/.deno/bin:${PATH}"
+
 RUN mkdir -p /home/developer/.zsh
 
 ENV TERM=xterm

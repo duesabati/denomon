@@ -14,12 +14,13 @@
 
   "mounts": [
     "source=zsh_history-${devcontainerId},target=/home/developer/.zsh,type=volume",
+    "source=deno_cache-${devcontainerId},target=/home/developer/.deno,type=volume",
     "source=${localEnv:HOME}/.ssh,target=/home/developer/.ssh,type=bind",
     "source=${localWorkspaceFolder},target=/home/developer/workspace,type=bind,consistency=cached"
   ],
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2.13.0": {}
   },
 
   "customizations": {
