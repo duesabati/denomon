@@ -3,7 +3,8 @@
   "version": "0.0.1",
 
   "imports": {
-    "cliffy": "jsr:@cliffy/command@1.0.0-rc.8",
+    "cliffy/command": "jsr:@cliffy/command@1.0.0-rc.8",
+    "cliffy/prompt": "jsr:@cliffy/prompt@1.0.0-rc.8",
     "@denomon/core.kits": "jsr:@denomon/core.kits"
   },
 
