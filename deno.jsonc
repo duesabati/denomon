@@ -15,7 +15,7 @@
     "source/core/**",
     "source/libs/**",
 
-    ".denomon/**"
+    ".denomon/kits/**"
   ],
   "lock": false,
 
