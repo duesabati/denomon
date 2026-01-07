@@ -1,5 +1,6 @@
 import * as JSONC from '@std/jsonc'
 import { basename } from '@std/path'
+import { deepMerge } from '@std/collections'
 import type * as Command from './commands/index.ts'
 
 export class Kit {
@@ -10,27 +11,50 @@ export class Kit {
   }
 }
 
-export class Config {
-  constructor(private readonly associations = new Map<string, string>()) {}
+export interface ConfigurationSheet {
+  Write(c: Record<string, Record<string, string>>): void
+  Read(): Record<string, Record<string, string>>
+}
 
-  static Read(path: string): Config {
-    const text = Deno.readTextFileSync(path)
-    const { associations } = JSONC.parse(text) as Record<string, string>
-    return new Config(new Map(Object.entries(associations)))
+export class ConfigurationSheet implements ConfigurationSheet {
+  constructor(private readonly path: string) {}
+
+  Read() {
+    return JSONC.parse(Deno.readTextFileSync(this.path)) as Record<
+      string,
+      Record<string, string>
+    >
   }
 
+  Write(patch: Record<string, Record<string, string>>): void {
+    const prev = deepMerge(this.Read(), patch)
+    Deno.writeTextFileSync(this.path, JSON.stringify(prev, null, 2))
+  }
+}
+
+export class Configurator {
+  constructor(private readonly sheet: ConfigurationSheet) {}
+
   Find(app: string) {
-    return this.associations.get(app)
+    const { associations } = this.sheet.Read()
+    return associations[app]
+  }
+
+  Associate(app: string, kit: string) {
+    this.sheet.Write({ associations: { [app]: kit } })
   }
 }
 
 export class Registry {
-  constructor(private readonly path: string, private readonly config: Config) {}
+  constructor(
+    private readonly path: string,
+    private readonly config: Configurator,
+  ) {}
 
   For(app: string): Kit {
     const kit = this.config.Find(basename(app))
 
-    if (!kit) throw new Error(`Kit not found for app: ${app}`)
+    if (!kit) throw new Error(`Kit not configured for app: ${app}`)
 
     return new Kit(this.path + `/${kit}`, app)
   }

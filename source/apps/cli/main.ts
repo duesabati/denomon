@@ -11,4 +11,6 @@ await new Command()
   .command('build', Commands.build)
   /** Develop */
   .command('develop', Commands.dev)
+  /** Kits */
+  .command('kits', Commands.kits)
   .parse(Deno.args)
