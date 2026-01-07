@@ -1,4 +1,4 @@
-import { Command } from 'cliffy'
+import { Command } from 'cliffy/command'
 
 import * as Kits from '@denomon/core-kits'
 
@@ -8,7 +8,7 @@ const APPS_DIR = Kits.Env.get('APPS_DIR')
 const ARTIFACTS_DIR = Kits.Env.get('ARTIFACTS_DIR')
 const ENVS_DIR = Kits.Env.get('ENVS_DIR')
 
-const config = Kits.Config.Read(KITS_CONFIG)
+const config = new Kits.Configurator(new Kits.ConfigurationSheet(KITS_CONFIG))
 const kits = new Kits.Registry(KITS_DIR, config)
 
 const cmd = (opts: Kits.Build.Options, app: string) => {
@@ -27,7 +27,7 @@ const configure = (cmd: Command<any, any, any>): void => {
   cmd.option(
     '-e, --environment <env:string>',
     'The env directory from which the kit will collect env vars.',
-    { default: 'production' },
+    { default: null },
   )
     .option(
       '-w, --watch [watch:boolean]',
@@ -52,7 +52,9 @@ const dev = new Command<void, void, Kits.Build.Options, [string]>()
     'Execute the build command in development mode. Alias for `build --develop`.',
   )
   .alias('dev')
-  .action((opts, pkg) => cmd({ ...opts, watch: true, environment: 'development' }, pkg))
+  .action((opts, pkg) =>
+    cmd({ ...opts, watch: true, environment: opts.environment ?? 'development' }, pkg)
+  )
 
 configure(dev)
 
