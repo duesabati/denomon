@@ -35,7 +35,7 @@ export class ConfigurationSheet implements ConfigurationSheet {
 export class Configurator {
   constructor(private readonly sheet: ConfigurationSheet) {}
 
-  Find(app: string) {
+  Find(app: string): string {
     const { associations } = this.sheet.Read()
     return associations[app]
   }
