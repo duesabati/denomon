@@ -1,5 +1,5 @@
 {
-  "name": "@denomon/sdk",
+  "name": "@denomon/core-sdk",
   "description": "Denomon SDK",
   "version": "0.0.1",
   "exports": "./index.ts",
