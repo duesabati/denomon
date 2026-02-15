@@ -1,5 +1,3 @@
-import { Env } from '../env.ts'
-
 import { Generic } from './concepts.ts'
 import { parse } from '@std/dotenv'
 import { basename } from '@std/path'
@@ -14,6 +12,7 @@ export type Options = {
 export type Configuration = { out: string }
 
 export const ENTRYPOINT = 'build.ts'
+export const ENV_PREFIX = 'DENOMON_BUILD_'
 
 /**
  * The Build capability of a kit.
@@ -27,16 +26,18 @@ export class Command extends Generic {
 
   Run(kit: string, app: string): void {
     const out = this.options.out
-    const app_name = basename(app).replace(/\.[^/.]+$/, '')
-    const ENV_VAR_PREFIX = `APP_${app_name.toUpperCase()}_`
-
-    Env.set('ENV_VARS_PREFIX', ENV_VAR_PREFIX)
 
     let env: Record<string, string> = {}
     const envFilePath = `${this.options.environment}/${basename(app)}.env`
 
     try {
-      env = parse(Deno.readTextFileSync(envFilePath))
+      const fromFile = parse(Deno.readTextFileSync(envFilePath))
+
+      env = fromFile
+
+      for (const [key, value] of Object.entries(fromFile)) {
+        env[ENV_PREFIX + key] = value
+      }
     } catch (_) {
       // noop
     }
@@ -56,11 +57,7 @@ export class Command extends Generic {
 
     const cmd = new Deno.Command('deno', {
       args,
-      env: Object.fromEntries(
-        Object.entries(env).map((
-          [key, value],
-        ) => [ENV_VAR_PREFIX + key, value]),
-      ),
+      env,
       stdout: 'piped',
       stderr: 'piped',
     })
