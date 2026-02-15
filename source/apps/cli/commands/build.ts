@@ -14,7 +14,7 @@ const kits = new Kits.Registry(KITS_DIR, config)
 const cmd = (opts: Kits.Build.Options, app: string) => {
   const build = new Kits.Build.Command({
     out: ARTIFACTS_DIR + `/${app}`,
-    environment: ENVS_DIR + `/${opts.environment}`,
+    environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
     watch: opts.watch,
     minify: !opts.watch,
     sourcemap: true,
@@ -27,7 +27,6 @@ const configure = (cmd: Command<any, any, any>): void => {
   cmd.option(
     '-e, --environment <env:string>',
     'The env directory from which the kit will collect env vars.',
-    { default: null },
   )
     .option(
       '-w, --watch [watch:boolean]',
@@ -53,7 +52,11 @@ const dev = new Command<void, void, Kits.Build.Options, [string]>()
   )
   .alias('dev')
   .action((opts, pkg) =>
-    cmd({ ...opts, watch: true, environment: opts.environment ?? 'development' }, pkg)
+    cmd({
+      ...opts,
+      watch: true,
+      environment: opts.environment ?? 'development',
+    }, pkg)
   )
 
 configure(dev)
