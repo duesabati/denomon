@@ -35,10 +35,10 @@ export const Parse = (args: string[]): Parsed => {
   }
 }
 
-export const Env = () => {
+export const Env = (): Record<string, string | undefined> => {
   const current = Deno.env.toObject()
 
-  const build: Record<string, string> = {}
+  const build: Record<string, string | undefined> = {}
 
   for (const [key, value] of Object.entries(current)) {
     if (key.startsWith(Kits.Build.ENV_PREFIX)) {
