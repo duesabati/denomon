@@ -1,1 +1,1 @@
-export * as BuildOptions from './build.ts'
+export * as Build from './build.ts'
