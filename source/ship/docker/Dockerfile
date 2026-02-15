@@ -22,20 +22,13 @@ RUN deno compile \
 FROM debian:bookworm-slim AS base
 
 # Setup user and directories to ease permissions management
-ARG USERNAME=developer
+ARG WORKSPACE_DIR="/workspace"
+ENV DENO_DIR="/.cache"
 
-RUN useradd --create-home ${USERNAME}
+RUN mkdir -p ${WORKSPACE_DIR} ${DENO_DIR} 
 
-ARG WORKSPACE_DIR="/home/${USERNAME}/workspace"
-
-ENV HOME=/home/${USERNAME}
-RUN mkdir -p ${WORKSPACE_DIR} \
-  && chown -R ${USERNAME}:${USERNAME} ${HOME}
-
-ENV DENO_DIR="/home/${USERNAME}/.cache"
-COPY --from=denoland/deno:bin-2.6.3 /deno "/home/${USERNAME}/.deno/bin/deno"
-ENV PATH="/home/${USERNAME}/.deno/bin:${PATH}"
-
+COPY --from=denoland/deno:bin-2.6.9 /deno "/.deno/bin/deno"
+ENV PATH="/.deno/bin:${PATH}"
 
 # Set Denomon environment variables
 ENV DENOMON_PATH="/usr/local/bin/denomon"
@@ -51,10 +44,8 @@ ENV DENOMON_ENVS_DIR="${WORKSPACE_DIR}/source/envs"
 ENV DENOMON_APPS_DIR="${WORKSPACE_DIR}/source/apps"
 
 # Install Denomon binary
-COPY --from=compiler --chown=${USERNAME}:${USERNAME} "/workspace/bin/denomon" "${DENOMON_PATH}"
+COPY --from=compiler "/workspace/bin/denomon" "${DENOMON_PATH}"
 ENV PATH="/usr/local/bin:${PATH}"
-
-USER $USERNAME
 
 WORKDIR ${WORKSPACE_DIR}
 
