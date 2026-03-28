@@ -6,7 +6,7 @@
 
   "imports": {
     "@std/cli": "jsr:@std/cli@1.0.25",
-    "@denomon/core-kits": "jsr:@denomon/core-kits@0.0.2"
+    "@denomon/core-kits": "jsr:@denomon/core-kits@0.0.3"
   },
 
   "license": "MIT",
