@@ -11,6 +11,7 @@ export type Options = {
 
 export type Configuration = {
   config?: string
+  app: string
 }
 
 const ARTIFACTS_DIR = Env.get('ARTIFACTS_DIR')
@@ -62,6 +63,7 @@ export class Command extends Generic {
       this.options.config ? `--config=${this.options.config}` : '',
       this.options.watch ? '--watch' : '',
       this.options.environment ? `--env-dir=${env_name}` : '',
+      `--app=${app}`,
       ARTIFACTS_DIR + `/${app}`,
     ].filter(Boolean)
 

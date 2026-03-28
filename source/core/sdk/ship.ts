@@ -9,10 +9,14 @@ export type Parsed =
 export const Parse = (args: string[]): Parsed => {
   const parsed = parseArgs(args, {
     boolean: ['watch'],
-    string: ['env-dir', 'out-dir', 'config'],
-    default: { 'env-dir': 'production' },
+    string: ['env-dir', 'out-dir', 'config', 'app'],
+    default: { 'env-dir': 'production', 'app': 'unknown' },
     stopEarly: true,
   })
+
+  if (!parsed['app']) {
+    throw new Error('--app is required')
+  }
 
   return {
     environment: parsed['env-dir'],
@@ -20,6 +24,7 @@ export const Parse = (args: string[]): Parsed => {
     watch: parsed['watch'],
     config: parsed['config'],
     src: String(parsed._[0]),
+    app: parsed['app'],
   }
 }
 

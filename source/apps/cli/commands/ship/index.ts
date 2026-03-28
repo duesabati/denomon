@@ -32,6 +32,7 @@ const cmd = (opts: Kits.Ship.Options, app: string | 'all', kit: string) => {
         environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
         watch: opts.watch,
         config: SHIP_DIR + `/${app}`,
+        app,
       })
 
       kits.Ship(kit, app).Execute(build)
@@ -45,6 +46,7 @@ const cmd = (opts: Kits.Ship.Options, app: string | 'all', kit: string) => {
     environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
     watch: opts.watch,
     config: SHIP_DIR + `/${app}`,
+    app,
   })
 
   return kits.Ship(kit, app).Execute(build)
