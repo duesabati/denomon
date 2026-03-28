@@ -9,6 +9,10 @@ export type Options = {
   out?: string
 }
 
+export type Configuration = {
+  config?: string
+}
+
 const ARTIFACTS_DIR = Env.get('ARTIFACTS_DIR')
 const PACKAGES_DIR = Env.get('PACKAGES_DIR')
 const ENVS_DIR = Env.get('ENVS_DIR')
@@ -22,7 +26,7 @@ export const ENV_PREFIX = 'DENOMON_BUILD_'
  * It sets the necessary env vars and runs the build script of the kit.
  */
 export class Command extends Generic {
-  constructor(private readonly options: Options) {
+  constructor(private readonly options: Options & Configuration) {
     super()
   }
 
@@ -52,7 +56,8 @@ export class Command extends Generic {
       '--quiet',
       '--unstable-bundle',
       kit + `/${ENTRYPOINT}`,
-      `--out=${out ?? PACKAGES_DIR + `/${app}`}`,
+      `--out-dir=${out ?? PACKAGES_DIR + `/${app}`}`,
+      this.options.config ? `--config=${this.options.config}` : '',
       this.options.watch ? '--watch' : '',
       ARTIFACTS_DIR + `/${app}`,
     ].filter(Boolean)
