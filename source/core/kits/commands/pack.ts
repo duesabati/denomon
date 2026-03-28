@@ -15,7 +15,6 @@ export type Configuration = {
 }
 
 const ARTIFACTS_DIR = Env.get('ARTIFACTS_DIR')
-const PACKAGES_DIR = Env.get('PACKAGES_DIR')
 const ENVS_DIR = Env.get('ENVS_DIR')
 
 export const ENTRYPOINT = 'main.ts'
@@ -59,7 +58,7 @@ export class Command extends Generic {
       '--quiet',
       '--unstable-bundle',
       kit + `/${ENTRYPOINT}`,
-      `--out-dir=${out ?? PACKAGES_DIR + `/${app}`}`,
+      out ? `--out-dir=${out}` : '',
       this.options.config ? `--config=${this.options.config}` : '',
       this.options.watch ? '--watch' : '',
       this.options.environment ? `--env-dir=${env_name}` : '',
