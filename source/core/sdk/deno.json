@@ -1,12 +1,12 @@
 {
   "name": "@denomon/core-sdk",
   "description": "Denomon SDK",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "exports": "./index.ts",
 
   "imports": {
     "@std/cli": "jsr:@std/cli@1.0.25",
-    "@denomon/core-kits": "jsr:@denomon/core-kits@0.0.5"
+    "@denomon/core-kits": "jsr:@denomon/core-kits@0.0.6"
   },
 
   "license": "MIT",
