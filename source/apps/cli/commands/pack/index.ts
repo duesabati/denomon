@@ -12,7 +12,7 @@ const SHIP_DIR = Kits.Env.get('SHIP_DIR')
 const config = new Kits.Configurator(new Kits.ConfigurationSheet(KITS_CONFIG))
 const kits = new Kits.Registry(KITS_DIR, config)
 
-const cmd = (opts: Kits.Ship.Options, app: string | 'all', kit: string) => {
+const cmd = (opts: Kits.Pack.Options, app: string | 'all', kit: string) => {
   if (app === 'all') {
     const paths: string[] = []
 
@@ -27,7 +27,7 @@ const cmd = (opts: Kits.Ship.Options, app: string | 'all', kit: string) => {
     const apps = paths.map(p => p.replace(APPS_DIR, '').replace('/deno.json', ''))
 
     for (const app of apps) {
-      const build = new Kits.Ship.Command({
+      const build = new Kits.Pack.Command({
         out: opts.out,
         environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
         watch: opts.watch,
@@ -35,13 +35,13 @@ const cmd = (opts: Kits.Ship.Options, app: string | 'all', kit: string) => {
         app,
       })
 
-      kits.Ship(kit, app).Execute(build)
+      kits.Pack(kit, app).Execute(build)
     }
 
     return
   }
 
-  const build = new Kits.Ship.Command({
+  const build = new Kits.Pack.Command({
     out: opts.out,
     environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
     watch: opts.watch,
@@ -49,7 +49,7 @@ const cmd = (opts: Kits.Ship.Options, app: string | 'all', kit: string) => {
     app,
   })
 
-  return kits.Ship(kit, app).Execute(build)
+  return kits.Pack(kit, app).Execute(build)
 }
 
 const configure = (cmd: Command<any, any, any>): void => {
@@ -63,18 +63,18 @@ const configure = (cmd: Command<any, any, any>): void => {
       'Whether to run the build in watch mode.',
       { default: false },
     )
-    .arguments('<package:string> <kit:string>', [
-      'Target package to build. Use "all" to build all packages.',
-      'The kit to use for shipping.',
+    .arguments('<artifacts:string> <packing_kit:string>', [
+      'Target artifacts to build. Use "all" to build all artifacts.',
+      'The kit to use for packing.',
     ])
 }
 
-/*************** Ship command ***************/
-const ship = new Command<void, void, Kits.Ship.Options, [string, string]>()
-  .description('Execute the ship kit associated with the package.')
+/*************** Pack command ***************/
+const pack = new Command<void, void, Kits.Pack.Options, [string, string]>()
+  .description('Execute the pack kit associated with the package.')
   .action(cmd)
 
-configure(ship)
+configure(pack)
 
 
-export { ship }
+export { pack }

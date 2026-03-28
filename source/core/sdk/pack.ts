@@ -2,8 +2,8 @@ import * as Kits from '@denomon/core-kits'
 import { parseArgs } from '@std/cli'
 
 export type Parsed = 
-  & Kits.Ship.Options
-  & Kits.Ship.Configuration
+  & Kits.Pack.Options
+  & Kits.Pack.Configuration
   & { src: string }
 
 export const Parse = (args: string[]): Parsed => {
@@ -34,8 +34,8 @@ export const Env = (): Record<string, string | undefined> => {
   const envs: Record<string, string | undefined> = {}
 
   for (const [key, value] of Object.entries(current)) {
-    if (key.startsWith(Kits.Ship.ENV_PREFIX)) {
-      const envKey = key.substring(Kits.Ship.ENV_PREFIX.length)
+    if (key.startsWith(Kits.Pack.ENV_PREFIX)) {
+      const envKey = key.substring(Kits.Pack.ENV_PREFIX.length)
       envs[envKey] = value
     }
   }
