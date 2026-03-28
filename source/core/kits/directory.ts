@@ -1,10 +1,9 @@
 import * as JSONC from '@std/jsonc'
-import { basename } from '@std/path'
 import { deepMerge } from '@std/collections'
 import type * as Command from './commands/index.ts'
 
 export class Kit {
-  constructor(private readonly path: string, private readonly app: string) {}
+  constructor(private readonly path: string, private readonly app: string) { }
 
   Execute(command: Command.Generic): void {
     command.Run(this.path, this.app)
@@ -17,7 +16,7 @@ export interface ConfigurationSheet {
 }
 
 export class ConfigurationSheet implements ConfigurationSheet {
-  constructor(private readonly path: string) {}
+  constructor(private readonly path: string) { }
 
   Read() {
     return JSONC.parse(Deno.readTextFileSync(this.path)) as Record<
@@ -33,11 +32,16 @@ export class ConfigurationSheet implements ConfigurationSheet {
 }
 
 export class Configurator {
-  constructor(private readonly sheet: ConfigurationSheet) {}
+  constructor(private readonly sheet: ConfigurationSheet) { }
 
-  Find(app: string): string {
+  Find(app: string): string | null {
     const { associations } = this.sheet.Read()
-    return associations[app]
+
+    for (const [a, k] of Object.entries(associations)) {
+      if (app.endsWith(a)) return k
+    }
+
+    return null
   }
 
   Associate(app: string, kit: string) {
@@ -52,10 +56,14 @@ export class Registry {
   ) {}
 
   For(app: string): Kit {
-    const kit = this.config.Find(basename(app))
+    const kit = this.config.Find(app)
 
     if (!kit) throw new Error(`Kit not configured for app: ${app}`)
 
-    return new Kit(this.path + `/${kit}`, app)
+    return new Kit(this.path + `/app/${kit}`, app)
+  }
+
+  Ship(name: string, app: string): Kit {
+    return new Kit(this.path + `/ship/${name}`, app)
   }
 }

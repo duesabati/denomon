@@ -1,6 +1,7 @@
-import { Generic } from './concepts.ts'
 import { parse } from '@std/dotenv'
-import { basename } from '@std/path'
+
+import { Generic } from './concepts.ts'
+import { Env } from '../env.ts'
 
 export type Options = {
   environment?: string
@@ -10,6 +11,9 @@ export type Options = {
 }
 
 export type Configuration = { out: string }
+
+const APPS_DIR = Env.get('APPS_DIR')
+const ENVS_DIR = Env.get('ENVS_DIR')
 
 export const ENTRYPOINT = 'build.ts'
 export const ENV_PREFIX = 'DENOMON_BUILD_'
@@ -27,8 +31,13 @@ export class Command extends Generic {
   Run(kit: string, app: string): void {
     const out = this.options.out
 
+    const app_name = app.replace(`${APPS_DIR}/`, '')
+    const env_name = this.options.environment
+      ? this.options.environment.replace(`${ENVS_DIR}/`, '')
+      : 'production'
+
     let env: Record<string, string> = {}
-    const envFilePath = `${this.options.environment}/${basename(app)}.env`
+    const envFilePath = `${this.options.environment}/${app_name}.env`
 
     try {
       const fromFile = parse(Deno.readTextFileSync(envFilePath))
@@ -38,9 +47,7 @@ export class Command extends Generic {
       for (const [key, value] of Object.entries(fromFile)) {
         env[ENV_PREFIX + key] = value
       }
-    } catch (_) {
-      // noop
-    }
+    } catch (_) { /* noop */ }
 
     const args = [
       'run',
@@ -65,7 +72,7 @@ export class Command extends Generic {
     if (!this.options.environment) {
       console.log('No environment loaded.')
     } else {
-      console.log(`Loaded environment «${basename(this.options.environment)}»`)
+      console.log(`Loaded environment «${env_name}»`)
       console.log(JSON.stringify(env, null, 2))
     }
 

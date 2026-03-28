@@ -1,4 +1,5 @@
 import { Command } from 'cliffy/command'
+import { walkSync } from '@std/fs'
 
 import * as Kits from '@denomon/core-kits'
 
@@ -11,7 +12,35 @@ const ENVS_DIR = Kits.Env.get('ENVS_DIR')
 const config = new Kits.Configurator(new Kits.ConfigurationSheet(KITS_CONFIG))
 const kits = new Kits.Registry(KITS_DIR, config)
 
-const cmd = (opts: Kits.Build.Options, app: string) => {
+const cmd = (opts: Kits.Build.Options, app: string | 'all') => {
+  if (app === 'all') {
+    const paths: string[] = []
+
+    // Collect all dir paths that contains a deno.json file
+    for (const entry of walkSync(APPS_DIR)) {
+      if (entry.isFile && entry.name === 'deno.json') {
+        paths.push(entry.path)
+      }
+    }
+
+    // Get the directory name of each path and build them
+    const apps = paths.map(p => p.replace(APPS_DIR, '').replace('/deno.json', ''))
+
+    for (const app of apps) {
+      const build = new Kits.Build.Command({
+        out: ARTIFACTS_DIR + `/${app}`,
+        environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
+        watch: opts.watch,
+        minify: !opts.watch,
+        sourcemap: true,
+      })
+
+      kits.For(APPS_DIR + `/${app}`).Execute(build)
+    }
+
+    return
+  }
+
   const build = new Kits.Build.Command({
     out: ARTIFACTS_DIR + `/${app}`,
     environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
@@ -24,16 +53,19 @@ const cmd = (opts: Kits.Build.Options, app: string) => {
 }
 
 const configure = (cmd: Command<any, any, any>): void => {
-  cmd.option(
-    '-e, --environment <env:string>',
-    'The env directory from which the kit will collect env vars.',
-  )
+  cmd
+    .option(
+      '-e, --environment <env:string>',
+      'The env directory from which the kit will collect env vars.',
+    )
     .option(
       '-w, --watch [watch:boolean]',
       'Whether to run the build in watch mode.',
       { default: false },
     )
-    .arguments('<package:string>')
+    .arguments('<package:string | "all">', [
+      'Target package to build. Use "all" to build all packages.',
+    ])
 }
 
 /*************** Build command ***************/
