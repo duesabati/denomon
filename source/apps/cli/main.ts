@@ -18,4 +18,6 @@ await new Command()
   .command('kits', Commands.kits)
   /** Self Management */
   .command('update', Commands.update)
+  /** Ship */
+  .command('ship', Commands.ship)
   .parse(Deno.args)
