@@ -1,17 +1,16 @@
 import * as Kits from '@denomon/core-kits'
 import { parseArgs } from '@std/cli'
 
-export type Parsed = Kits.Ship.Options & {
-  src: string
-}
+export type Parsed = 
+  & Kits.Ship.Options
+  & Kits.Ship.Configuration
+  & { src: string }
 
 export const Parse = (args: string[]): Parsed => {
   const parsed = parseArgs(args, {
     boolean: ['watch'],
-    string: ['env-dir', 'out-dir'],
-    default: {
-      'env-dir': 'production',
-    },
+    string: ['env-dir', 'out-dir', 'config'],
+    default: { 'env-dir': 'production' },
     stopEarly: true,
   })
 
@@ -19,6 +18,7 @@ export const Parse = (args: string[]): Parsed => {
     environment: parsed['env-dir'],
     out: parsed['out-dir'],
     watch: parsed['watch'],
+    config: parsed['config'],
     src: String(parsed._[0]),
   }
 }
