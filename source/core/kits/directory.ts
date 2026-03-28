@@ -63,7 +63,7 @@ export class Registry {
     return new Kit(this.path + `/app/${kit}`, app)
   }
 
-  Ship(name: string, app: string): Kit {
-    return new Kit(this.path + `/ship/${name}`, app)
+  Pack(name: string, app: string): Kit {
+    return new Kit(this.path + `/pack/${name}`, app)
   }
 }
