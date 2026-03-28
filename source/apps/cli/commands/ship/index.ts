@@ -7,6 +7,7 @@ const KITS_DIR = Kits.Env.get('KITS_DIR')
 const KITS_CONFIG = Kits.Env.get('KITS_CONFIG')
 const APPS_DIR = Kits.Env.get('APPS_DIR')
 const ENVS_DIR = Kits.Env.get('ENVS_DIR')
+const SHIP_DIR = Kits.Env.get('SHIP_DIR')
 
 const config = new Kits.Configurator(new Kits.ConfigurationSheet(KITS_CONFIG))
 const kits = new Kits.Registry(KITS_DIR, config)
@@ -42,6 +43,7 @@ const cmd = (opts: Kits.Ship.Options, app: string | 'all', kit: string) => {
     out: opts.out,
     environment: ENVS_DIR + `/${opts.environment ?? 'production'}`,
     watch: opts.watch,
+    config: SHIP_DIR,
   })
 
   return kits.Ship(kit, app).Execute(build)
@@ -58,7 +60,7 @@ const configure = (cmd: Command<any, any, any>): void => {
       'Whether to run the build in watch mode.',
       { default: false },
     )
-    .arguments('<package:string "all"> <kit:string>', [
+    .arguments('<package:string,all> <kit:string>', [
       'Target package to build. Use "all" to build all packages.',
       'The kit to use for shipping.',
     ])
