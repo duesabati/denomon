@@ -18,7 +18,7 @@ const PACKAGES_DIR = Env.get('PACKAGES_DIR')
 const ENVS_DIR = Env.get('ENVS_DIR')
 
 export const ENTRYPOINT = 'main.ts'
-export const ENV_PREFIX = 'DENOMON_BUILD_'
+export const ENV_PREFIX = 'RELEASE_ARG_'
 
 /**
  * A ship kit.
@@ -37,16 +37,18 @@ export class Command extends Generic {
       ? this.options.environment.replace(`${ENVS_DIR}/`, '')
       : 'production'
 
-    let env: Record<string, string> = {}
+    const env: Record<string, string> = {}
     const envFilePath = `${this.options.environment}/${app}.env`
 
     try {
       const fromFile = parse(Deno.readTextFileSync(envFilePath))
 
-      env = fromFile
+      const releaseArgs = Object.entries(fromFile).filter(([key]) =>
+        key.startsWith(ENV_PREFIX)
+      )
 
-      for (const [key, value] of Object.entries(fromFile)) {
-        env[ENV_PREFIX + key] = value
+      for (const [key, value] of releaseArgs) {
+        env[key] = value
       }
     } catch (_) { /* noop */ }
 
@@ -59,6 +61,7 @@ export class Command extends Generic {
       `--out-dir=${out ?? PACKAGES_DIR + `/${app}`}`,
       this.options.config ? `--config=${this.options.config}` : '',
       this.options.watch ? '--watch' : '',
+      this.options.environment ? `--env-dir=${env_name}` : '',
       ARTIFACTS_DIR + `/${app}`,
     ].filter(Boolean)
 

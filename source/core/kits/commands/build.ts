@@ -59,6 +59,7 @@ export class Command extends Generic {
       this.options.minify ? '--minify' : '',
       this.options.sourcemap ? '--sourcemap' : '',
       this.options.watch ? '--watch' : '',
+      this.options.environment ? `--env-dir=${this.options.environment}` : '',
       app,
     ].filter(Boolean)
 
