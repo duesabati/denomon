@@ -1,7 +1,7 @@
 import * as Kits from '@denomon/core-kits'
 import { parseArgs } from '@std/cli'
 
-export type Parsed = Kits.Ship.Options & Kits.Ship.Configuration & {
+export type Parsed = Kits.Ship.Options & {
   src: string
 }
 
