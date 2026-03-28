@@ -17,5 +17,5 @@ await new Command()
   /** Kits */
   .command('kits', Commands.kits)
   /** Self Management */
-  .command('generate', Commands.generate)
+  .command('update', Commands.update)
   .parse(Deno.args)
