@@ -26,14 +26,14 @@ export const Parse = (args: string[]): Parsed => {
 export const Env = (): Record<string, string | undefined> => {
   const current = Deno.env.toObject()
 
-  const build: Record<string, string | undefined> = {}
+  const envs: Record<string, string | undefined> = {}
 
   for (const [key, value] of Object.entries(current)) {
     if (key.startsWith(Kits.Ship.ENV_PREFIX)) {
       const envKey = key.substring(Kits.Ship.ENV_PREFIX.length)
-      build[envKey] = value
+      envs[envKey] = value
     }
   }
 
-  return build
+  return envs
 }
